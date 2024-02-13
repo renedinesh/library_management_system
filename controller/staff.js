@@ -43,7 +43,11 @@ class staffController {
 
     updatedStaffDetail = async (req, res) => {
         try {
-            const datas = await Staff.update({
+            const exitingStaff = await Staff.findByPk(req.params.id);
+            if (!exitingStaff) {
+                return res.status(404).send({ error: 'Staff not found' })
+            }
+            await Staff.update({
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
                 employeeId: req.body.employeeId,
@@ -52,11 +56,9 @@ class staffController {
                 emailId: req.body.emailId,
             }, { where: { id: req.params.id } });
             const updatingStaffDetail = await Staff.findByPk(req.params.id);
-            if (updatingStaffDetail) {
-                return res.status(200).send({ data: updatingStaffDetail });
-            } else {
-                return res.status(404).send({ error: 'Failed to update staff detail' });
-            };
+
+            return res.status(200).send({ data: updatingStaffDetail });
+
         } catch (error) {
             console.error(error);
             return res.status(500).send({ error: 'Internal server error' });

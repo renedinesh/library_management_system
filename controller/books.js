@@ -42,7 +42,11 @@ class booksController {
 
     updateBooksDetails = async (req, res) => {
         try {
-            const datas = await Books.update({
+            const exitingBooks = await Books.findByPk(req.params.id)
+            if (!exitingBooks) {
+                return res.status(404).send({ error: 'Book not found' })
+            }
+            await Books.update({
                 author: req.body.author,
                 title: req.body.title,
                 bookId: req.body.bookId,
@@ -52,11 +56,9 @@ class booksController {
                 publisher: req.body.publisher
             }, { where: { id: req.params.id } });
             const updatingBooksDetails = await Books.findByPk(req.params.id);
-            if (updatingBooksDetails) {
-                return res.status(201).send({ data: updatingBooksDetails });
-            } else {
-                return res.status(400).send({ error: 'Failed to update book details' });
-            }
+
+            return res.status(201).send({ data: updatingBooksDetails });
+
 
         } catch (error) {
             console.error(error);

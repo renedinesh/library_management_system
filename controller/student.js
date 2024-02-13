@@ -44,27 +44,26 @@ class studentController {
 
     updatedStudentDetails = async (req, res) => {
         try {
-            let updatingStudentDetails = await Student.update({
+            const exitingStudent = await Student.findByPk(req.params.id);
+            if (!exitingStudent) {
+                return res.status(404).send({ error: 'Student not found' });
+            };
+
+            await Student.update({
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
-                address: req.body.address,
                 fatherName: req.body.fatherName,
+                address: req.body.address,
                 rollNo: req.body.rollNo,
                 phoneNo: req.body.phoneNo
             }, { where: { id: req.params.id } });
-            
-            if (updatingStudentDetails) {
-                const updatedStudent = await Student.findByPk(req.params.id);
-                return res.status(200).send({ data: updatedStudent });
-            } else {
-                return res.status(404).send({ error: 'Failed to updated student detail' });
-            }
-
+            const updatedStudent = await Student.findByPk(req.params.id);
+            return res.status(200).send({ data: updatedStudent, message: 'Student details updated' })
         } catch (error) {
             console.error('Error updating student details:', error);
             return res.status(500).send({ error: 'Internal server error' });
-        }
-    }
+        };
+    };
 
     findStudentById = async (req, res) => {
         try {

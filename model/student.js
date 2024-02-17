@@ -21,7 +21,7 @@ const Students = sequelize.define('student', {
     trim: true
   },
   rollNo: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     trim: true
   },
   phoneNo: {

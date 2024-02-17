@@ -1,19 +1,22 @@
-const Student = require('../model/student')
+const Student = require('../model/student');
+const rollNoIncrement  = require('./constants');
 
 class studentController {
 
     creatingStudentDetails = async (req, res) => {
         try {
 
+        const updatedRollNo = await rollNoIncrement.incrementLastRollNumberCount();
+            console.log( "updatedRollNo", updatedRollNo);
             const datas = {
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
                 fatherName: req.body.fatherName,
                 address: req.body.address,
-                rollNo: req.body.rollNo,
+                rollNo: updatedRollNo,
                 phoneNo: req.body.phoneNo
             };
-
+           
             const createStudentDetails = await Student.create(datas);
 
             if (createStudentDetails) {

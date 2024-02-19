@@ -1,13 +1,15 @@
 const Books = require('../model/books');
+const bookIncrementIdMethod = require('./bookAutoId.controller')
 
 class booksController {
 
     createBookDetails = async (req, res) => {
         try {
+            const updatedBookCount = await bookIncrementIdMethod.bookIncrementId()
             const datas = {
                 author: req.body.author,
                 title: req.body.title,
-                bookId: req.body.bookId,
+                bookId: updatedBookCount,
                 category: req.body.category,
                 price: req.body.price,
                 edition: req.body.edition,
@@ -16,6 +18,7 @@ class booksController {
 
             const creatingBookDetails = await Books.create(datas);
             if (creatingBookDetails) {
+                console.log("creatingBookDetails",creatingBookDetails);
                 return res.status(201).send({ data: creatingBookDetails });
             } else {
                 return res.status(404).send({ error: 'Failed to create book details' });

@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/database')
+const Author = require('./author.model')
 
 const Books = sequelize.define('books', {
 
@@ -7,9 +8,9 @@ const Books = sequelize.define('books', {
         type: DataTypes.STRING,
         trim: true
     },
-    title:{
+    title: {
         type: DataTypes.STRING,
-        trim:true
+        trim: true
     },
     bookId: {
         type: DataTypes.STRING,
@@ -31,14 +32,25 @@ const Books = sequelize.define('books', {
         type: DataTypes.STRING,
         trim: true
     },
-    status:{
-        type:DataTypes.STRING,
-        default:'1',
+    status: {
+        type: DataTypes.STRING,
+        default: '1',
         trim: true
+    },
+    authorId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    numOfCopies:{
+        type:DataTypes.INTEGER,
+        trim:true
     }
+
 }, {
     tableName: 'books',
     timestamps: true
 });
+
+//Books.belongsTo(Author, { foreignKey: 'authorId' });
 
 module.exports = Books;

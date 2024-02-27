@@ -13,12 +13,13 @@ class booksController {
                 category: req.body.category,
                 price: req.body.price,
                 edition: req.body.edition,
-                publisher: req.body.publisher
+                publisher: req.body.publisher,
+                numOfCopies: req.body.numOfCopies
             };
 
             const creatingBookDetails = await Books.create(datas);
             if (creatingBookDetails) {
-                console.log("creatingBookDetails",creatingBookDetails);
+                //console.log("creatingBookDetails",creatingBookDetails);
                 return res.status(201).send({ data: creatingBookDetails });
             } else {
                 return res.status(404).send({ error: 'Failed to create book details' });
@@ -56,7 +57,8 @@ class booksController {
                 category: req.body.category,
                 price: req.body.price,
                 edition: req.body.edition,
-                publisher: req.body.publisher
+                publisher: req.body.publisher,
+                numOfCopies: req.body.numOfCopies
             }, { where: { id: req.params.id } });
             const updatingBooksDetails = await Books.findByPk(req.params.id);
 

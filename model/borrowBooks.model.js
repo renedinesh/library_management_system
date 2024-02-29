@@ -19,6 +19,11 @@ const BorrowBooks = sequelize.define('borrowBooks', {
     borrowedAt:{
         type: DataTypes.DATE,
         trim: true
+    },
+    dueDate: {
+        type: DataTypes.DATE,
+        defaultValue:Sequelize.literal('NOW() + INTERVAL 7 DAYS'),
+        trim: true
     }
 }, {
   timestamps:true,

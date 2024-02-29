@@ -109,16 +109,10 @@ class borrowBooksController {
         }
     };
 
-
-
     returingBooksCount = async (req, res) => {
         try {
             const { studentId, bookId } = req.body;
-
-            // Call returnBook function to handle returning books
             const message = await returnBook(studentId, bookId);
-
-            // Send appropriate response based on the message
             if (typeof message === 'string') {
                 res.status(200).send({ message: message });
             } else {
@@ -129,11 +123,6 @@ class borrowBooksController {
             res.status(500).send({ error: 'Internal server error' });
         }
     }
-
-
-
-
-
 
 
 }

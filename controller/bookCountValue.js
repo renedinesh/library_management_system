@@ -17,7 +17,7 @@ async function borrowBooksValue(rollNo, bookId) {
             return 'No copies available';
         } else {
             const dueDate = new Date();
-            dueDate.setDate(dueDate.getDate() + 7)
+            dueDate.setDate(dueDate.getDate() + 1)
             const updatedBook = await Book.update({ numOfCopies: book.numOfCopies - 1 }, { where: { id: bookId } });
             //console.log("numOfCopies:", updatedBook[0].numOfCopies);
             await BorrowBooks.create({ studentId: rollNo, bookId: bookId, borrowedAt: new Date(), dueDate: dueDate });
@@ -46,13 +46,13 @@ async function returnBook(studentId, bookId) {
             return 'No active borrow book and student found'
         }
 
-        const dueDate = borrowingRecord.borrowedAt.setDate(borrowingRecord.borrowedAt.getDate() + 7)
+        const dueDate = borrowingRecord.borrowedAt.setDate(borrowingRecord.borrowedAt.getDate() + 1)
         const returnDate = new Date();
         const daysOverdue = Math.max(0, Math.floor((returnDate - dueDate) / (1000 * 60 * 60 * 24)));
         const fine = daysOverdue * 10;
 
         await Book.update({ numOfCopies: book.numOfCopies + 1 }, { where: { id: bookId } });
-        await BorrowBooks.update({ status: '0' }, { where: { studentId: studentId, bookId: bookId } });
+        await BorrowBooks.update({ status: '0', fineAmount: fine }, { where: { studentId: studentId, bookId: bookId } });
         if (daysOverdue == 0) {
             return 'Book returned successfully on time';
         } else {

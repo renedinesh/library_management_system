@@ -4,6 +4,7 @@ const initializeRoutes = (app) => {
     app.use('/books',require('./books'));
     app.use('/author',require('./author'));
     app.use('/borrowbooks',require('./borrowBooks'));
+    app.use('/reportmanagement', require('./reportManagement'));
 };
 
 

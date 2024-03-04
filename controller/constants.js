@@ -1,3 +1,4 @@
+const sequelize = require('../config/database');
 const Constants = require('../model/constants')
 
 async function incrementLastRollNumberCount() {
@@ -13,8 +14,9 @@ async function incrementLastRollNumberCount() {
 
 async function getLastRollNumber() {
     const lastStudent = await Constants.findOne({
-        where: { status: 1 },
-        order: [['createdAt', 'DESC']]
+        where:{
+            id: sequelize.literal('(SELECT MAX(id) FROM Constants)')
+        }
     });
 
     //console.log('Last student:', lastStudent); 

@@ -14,7 +14,8 @@ class booksController {
                 price: req.body.price,
                 edition: req.body.edition,
                 publisher: req.body.publisher,
-                numOfCopies: req.body.numOfCopies
+                numOfCopies: req.body.numOfCopies,
+                authorId: req.body.authorId
             };
 
             const creatingBookDetails = await Books.create(datas);

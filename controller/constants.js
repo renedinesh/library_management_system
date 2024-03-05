@@ -1,35 +1,34 @@
 const sequelize = require('../config/database');
-const Constants = require('../model/constants')
+const Constants = require('../model/constants');
+const Students = require('../model/student')
 
 async function incrementLastRollNumberCount() {
     let lastRollNo = await getLastRollNumber();
-    //console.log('Received last roll number:', lastRollNo); 
+    console.log('Received last roll number:', lastRollNo); 
     let updateRollNo = incrementRollNo(lastRollNo);
-    const prefix = 'STU'
-    await Constants.update({ count: updateRollNo, name:'STUDENT', prefix: prefix }, { where: { count: lastRollNo, status: 1 } })
+    await Constants.update({ count: updateRollNo }, { where: { id: 1 } })
 
     return updateRollNo;
 }
 
 
 async function getLastRollNumber() {
-    const lastStudent = await Constants.findOne({
-        where:{
-            id: sequelize.literal('(SELECT MAX(id) FROM Constants)')
-        }
+    const lastStudent = await Students.findOne({
+        attributes: ['rollNo'],
+        order: [['id', 'DESC']]
     });
 
-    //console.log('Last student:', lastStudent); 
+    console.log('Last student:', lastStudent); 
 
     if (!lastStudent) {
         return "STU0000";
     } else {
-        return lastStudent.count;
+        return lastStudent.rollNo;
     }
 }
 
 function incrementRollNo(count) {
-    //console.log('Received count:', count);
+    console.log('Received count:', count);
 
     if (!count || typeof count !== 'string' || !count.startsWith('STU') || count.length !== 7 || isNaN(parseInt(count.substring(3)))) {
         //console.error('Invalid roll number format:', count);
